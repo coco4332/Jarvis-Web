@@ -17,6 +17,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: jarvis-web
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -26,11 +29,12 @@ jobs:
         with:
           node-version: lts/*
           cache: npm
+          cache-dependency-path: jarvis-web/package-lock.json
       - run: npm ci
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./jarvis-web/dist
       - id: deployment
         uses: actions/deploy-pages@v4
